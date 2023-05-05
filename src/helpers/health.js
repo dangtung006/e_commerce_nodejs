@@ -4,8 +4,9 @@ const process = require("process");
 const _sec = 5000;
 
 const countDBConnect = () => {
-    const numConnection = mongoose.connections.length;
+    const numConnections = mongoose.connections.length;
     console.log("num of connection : : ", numConnection);
+    return numConnections;
 }
 
 const checkOverLoad = () => {

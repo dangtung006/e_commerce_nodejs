@@ -1,3 +1,4 @@
+require("dotenv").config();
 const MyDB = require("./src/init/dbs/init.database");
 const { checkOverLoad } = require("./src/helpers/health")
 async function main() {
@@ -9,6 +10,7 @@ async function main() {
         }
 
         IDInterval = checkOverLoad();
+
         process.on("SIGINT", () => {
             clearInterval(IDInterval);
             process.exit(1);

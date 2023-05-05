@@ -14,7 +14,5 @@ const server = app.listen(3000, () => {
 })
 
 process.on("SIGINT", () => {
-    // server.close(() => {
-    //     // console.log("Server Exited")
-    // })
+    server.close(() => console.log("Server Exited"));
 })

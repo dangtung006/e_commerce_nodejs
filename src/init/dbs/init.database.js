@@ -8,7 +8,9 @@ class MyDB {
 
     async connect(type = "mongodb") {
         try {
-            await mongoose.connect("mongodb://127.0.0.1:27017/myshop?retryWrites=true&w=majority");
+            await mongoose.connect("mongodb://127.0.0.1:27017/myshop?retryWrites=true&w=majority", {
+                maxPoolSize: 50
+            });
             console.log("connect success");
         } catch (err) {
             console.log(err)
