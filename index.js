@@ -12,15 +12,15 @@ async function main() {
             require("./src/app.js");
         }
 
-        IDInterval = checkOverLoad();
+        // IDInterval = checkOverLoad();
 
         process.on("SIGINT", () => {
-            clearInterval(IDInterval);
+            //clearInterval(IDInterval);
             process.exit(1);
         })
 
     } catch (err) {
-        console.log("err")
+        console.log("err", err)
     }
 }
 
