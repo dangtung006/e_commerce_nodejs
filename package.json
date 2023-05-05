@@ -1,0 +1,19 @@
+{
+  "name": "e_commerce_nodejs",
+  "version": "1.0.0",
+  "description": "My e_commerce source",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dangtung006/e_commerce_nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dangtung006/e_commerce_nodejs/issues"
+  },
+  "homepage": "https://github.com/dangtung006/e_commerce_nodejs#readme"
+}
