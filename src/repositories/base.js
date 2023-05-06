@@ -25,6 +25,10 @@ class BaseRepository {
         return this._Entity.findOne(condition).skip().limit()
     }
 
+    create(opt) {
+        return this._Entity.create(opt);
+    }
+
 }
 
 module.exports = BaseRepository

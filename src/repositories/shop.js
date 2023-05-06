@@ -9,4 +9,4 @@ class ShopRepository extends BaseRepository {
     }
 }
 
-module.exports = ShopRepository
+module.exports = new ShopRepository()
