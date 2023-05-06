@@ -19,33 +19,51 @@ class ShopServices {
         if (shop) return console.log("shop existed");
         const hashPassword = await bcrypt.hash(password, 10);
 
-        shop = await ShopRepository.create({
+        var newShop = await ShopRepository.create({
             name,
             email,
             password: hashPassword,
             roles: [ShopRoles['shop']]
-        })
-
-        const { privateKey, publicKey } = crypto.generateKeyPair("rsa", {
-            modulusLength: 4096
         });
 
-        const keys = await KeyRepository.create({
-            user: shop._id,
-            publicKey: publicKey.toString()
-        });
+        if (newShop) {
 
-        if (keys.publicKey) {
-            return console.log("make pulickey sucesd");
+            const { privateKey, publicKey } = crypto.generateKeyPair("rsa", {
+                modulusLength: 4096
+            });
+
+            const keys = await KeyRepository.create({
+                user: shop._id,
+                publicKey: publicKey.toString()
+            });
+
+            if (keys.publicKey) {
+                return console.log("make pulickey sucesd");
+            };
+
+            const tokens = createTokenPairs(
+                { id: shop._id, email: shop.email },
+                privateKey,
+                publicKey
+            );
+
+            return {
+                code: 200,
+                message: "success",
+                metadata: {
+                    shop: shop,
+                    tokens: tokens
+                }
+            }
         };
 
-        const tokens = createTokenPairs(
-            { id: shop._id, email: shop.email },
-            privateKey,
-            publicKey
-        );
+        return {
+            code: 201,
+            message: "fail",
+            metadata: null
+        }
 
-        return tokens;
+
     }
 
     static async signIn() {
