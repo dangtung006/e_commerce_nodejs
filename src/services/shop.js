@@ -1,6 +1,10 @@
-const ShopRepository = require("../repositories/shop");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+
+const ShopRepository = require("../repositories/shop");
+const KeyRepository = require("../repositories/key_token");
+const { createTokenPairs } = require("../helpers/auth");
+
 const ShopRoles = {
     'shop': "SHOP",
     'writer': "WRITER",
@@ -26,10 +30,25 @@ class ShopServices {
             modulusLength: 4096
         });
 
-        console.log(privateKey, publicKey);
+        const keys = await KeyRepository.create({
+            user: shop._id,
+            publicKey: publicKey.toString()
+        });
+
+        if (keys.publicKey) {
+            return console.log("make pulickey sucesd");
+        };
+
+        const tokens = createTokenPairs(
+            { id: shop._id, email: shop.email },
+            privateKey,
+            publicKey
+        );
+
+        return tokens;
     }
 
-    static async login() {
+    static async signIn() {
 
     }
 
