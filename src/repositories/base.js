@@ -9,13 +9,21 @@ class BaseRepository {
         return this._Entity.findById(id)
     }
 
-    getAll()
+    getAll() {
+        return this._Entity.find()
+    }
 
-    getList()
+    getList() {
+        return this._Entity.find().skip().limit()
+    }
 
-    getOne()
+    getOneByConditions(condition) {
+        return this._Entity.findOne(condition)
+    }
 
-    getByCondition()
+    getListByConditions(condition) {
+        return this._Entity.findOne(condition).skip().limit()
+    }
 
 }
 
