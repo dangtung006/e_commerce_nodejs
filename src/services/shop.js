@@ -27,25 +27,39 @@ class ShopServices {
         });
 
         if (newShop) {
+            // const { privateKey, publicKey } = crypto.generateKeyPairSync("rsa", {
+            //     modulusLength: 4096,
+            //     publicKeyEncoding: {
+            //         type: "pkcs1",
+            //         format: 'pem'
+            //     },
+            //     privateKeyEncoding: {
+            //         type: "pkcs1",
+            //         format: 'pem'
+            //     }
+            // });
 
-            const { privateKey, publicKey } = crypto.generateKeyPair("rsa", {
-                modulusLength: 4096
-            });
+            // const RsaKeys = await KeyRepository.create({
+            //     user: shop._id,
+            //     publicKey: publicKey.toString()
+            // });
+            // const publicKeyObj = crypto.createPublicKey(keys.publicKey);
 
-            const keys = await KeyRepository.create({
+            const privateKey = crypto.getRandomValues(64).toString("hex");
+            const publicKey = crypto.getRandomValues(64).toString("hex");
+
+            var keyStore = await KeyRepository.create({
                 user: shop._id,
-                publicKey: publicKey.toString()
+                publicKey,
+                privateKey
             });
 
-            if (keys.publicKey) {
-                return console.log("make pulickey sucesd");
-            };
+            if (!keyStore) return console.log("key stores err");
 
-            const tokens = createTokenPairs(
-                { id: shop._id, email: shop.email },
-                privateKey,
-                publicKey
-            );
+            const tokens = createTokenPairs({
+                id: shop._id,
+                email: shop.email
+            }, publicKey, privateKey);
 
             return {
                 code: 200,
