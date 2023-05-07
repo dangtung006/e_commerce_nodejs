@@ -4,6 +4,11 @@ const crypto = require("crypto");
 const ShopRepository = require("../repositories/shop");
 const KeyRepository = require("../repositories/key_token");
 const { createTokenPairs } = require("../helpers/auth");
+const { generateHashString } = require("../helpers/crypto");
+const {
+    BadRequestError,
+    InternalServerError,
+} = require("../commons/response/error")
 
 const ShopRoles = {
     'shop': "SHOP",
@@ -80,8 +85,33 @@ class ShopServices {
 
     }
 
-    static async signIn() {
+    static async signIn({ email, password, refreshToken = null }) {
+        const foundShop = ShopRepository.getOneByConditions({ email });
+        if (!foundShop)
+            throw new BadRequestError("Invalid Shop");
 
+        const match = bcrypt.compare(password, foundShop.password);
+        if (!match)
+            throw new BadRequestError("Authen failed");
+
+        const privateKey = generateHashString(64);
+        const publicKey = generateHashString(64);
+
+        const tokens = createTokenPairs({
+            id: foundShop._id,
+            email: foundShop.email
+        }, publicKey, privateKey);
+
+        await KeyRepository.create({
+            privateKey,
+            publicKey,
+            refreshToken: tokens.refreshToken
+        });
+
+        return {
+            shop: foundShop,
+            tokens
+        }
     }
 
 
