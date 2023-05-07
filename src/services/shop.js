@@ -6,8 +6,7 @@ const KeyRepository = require("../repositories/key_token");
 const { createTokenPairs } = require("../helpers/auth");
 const { generateHashString } = require("../helpers/crypto");
 const {
-    BadRequestError,
-    InternalServerError,
+    BadRequestError
 } = require("../commons/response/error")
 
 const ShopRoles = {
@@ -20,8 +19,9 @@ class ShopServices {
 
     static async signUp({ name, email, password }) {
         var shop = await ShopRepository.getOneByConditions({ email: email }).lean();
+        if (shop)
+            throw new BadRequestError("Shop registed");
 
-        if (shop) return console.log("shop existed");
         const hashPassword = await bcrypt.hash(password, 10);
 
         var newShop = await ShopRepository.create({
@@ -31,58 +31,24 @@ class ShopServices {
             roles: [ShopRoles['shop']]
         });
 
-        if (newShop) {
-            // const { privateKey, publicKey } = crypto.generateKeyPairSync("rsa", {
-            //     modulusLength: 4096,
-            //     publicKeyEncoding: {
-            //         type: "pkcs1",
-            //         format: 'pem'
-            //     },
-            //     privateKeyEncoding: {
-            //         type: "pkcs1",
-            //         format: 'pem'
-            //     }
-            // });
+        const privateKey = generateHashString(64)
+        const publicKey = generateHashString(64)
 
-            // const RsaKeys = await KeyRepository.create({
-            //     user: shop._id,
-            //     publicKey: publicKey.toString()
-            // });
-            // const publicKeyObj = crypto.createPublicKey(keys.publicKey);
+        await KeyRepository.create({
+            user: newShop._id,
+            publicKey,
+            privateKey
+        });
 
-            const privateKey = crypto.getRandomValues(64).toString("hex");
-            const publicKey = crypto.getRandomValues(64).toString("hex");
-
-            var keyStore = await KeyRepository.create({
-                user: shop._id,
-                publicKey,
-                privateKey
-            });
-
-            if (!keyStore) return console.log("key stores err");
-
-            const tokens = createTokenPairs({
-                id: shop._id,
-                email: shop.email
-            }, publicKey, privateKey);
-
-            return {
-                code: 200,
-                message: "success",
-                metadata: {
-                    shop: shop,
-                    tokens: tokens
-                }
-            }
-        };
+        const tokens = createTokenPairs({
+            id: shop._id,
+            email: shop.email
+        }, publicKey, privateKey);
 
         return {
-            code: 201,
-            message: "fail",
-            metadata: null
+            shop: newShop,
+            tokens: tokens
         }
-
-
     }
 
     static async signIn({ email, password, refreshToken = null }) {
