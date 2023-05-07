@@ -12,33 +12,47 @@ const REASON_STATUS_CODE = {
     'not_found': 'Not Found'
 }
 
-class ErrorResponse extends Error {
+class BaseErrorResponse extends Error {
     constructor(message, status) {
         super(message);
         this.status = status;
     }
 }
 
-class ConflictRequestErrorResponse extends ErrorResponse {
+class ConflictRequestErrorResponse extends BaseErrorResponse {
     constructor(message = STATUS_CODE['conflict'], status = REASON_STATUS_CODE['conflict']) {
         super(message, status)
     }
 }
 
-class ForbidenRequestError extends ErrorResponse {
+class ForbidenRequestError extends BaseErrorResponse {
     constructor(message = STATUS_CODE['forbidden'], status = REASON_STATUS_CODE['forbidden']) {
         super(message, status)
     }
 }
 
-class InternalServerError extends ErrorResponse {
+class BadRequestError extends BaseErrorResponse {
+    constructor(message = STATUS_CODE['forbidden'], status = REASON_STATUS_CODE['forbidden']) {
+        super(message, status)
+    }
+}
+
+class InternalServerError extends BaseErrorResponse {
     constructor(message = STATUS_CODE['internal'], status = REASON_STATUS_CODE['internal']) {
         super(message, status)
     }
 }
 
-class NotFoundError extends ErrorResponse {
+class NotFoundError extends BaseErrorResponse {
     constructor(message = STATUS_CODE['not_found'], status = REASON_STATUS_CODE['not_found']) {
         super(message, status)
     }
+}
+
+module.exports = {
+    ConflictRequestErrorResponse,
+    ForbidenRequestError,
+    BadRequestError,
+    InternalServerError,
+    NotFoundError
 }
