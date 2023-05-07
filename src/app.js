@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const compression = require("compression");
 const AppRoutes = require("./routes");
+const { errorHandler } = require("../src/middlewares/request")
 
 
 //init middleware
@@ -16,6 +17,7 @@ app.use(express.urlencoded({
 }))
 
 app.use(AppRoutes())
+app.use(errorHandler)
 
 const server = app.listen(3000, () => {
     console.log("app listen on port 3000")
