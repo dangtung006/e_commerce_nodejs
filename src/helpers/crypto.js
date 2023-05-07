@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 
 const generateHashString = (num) => {
-    return crypto.getRandomValues(num).toString("hex");
+    return crypto.randomBytes(num).toString("hex");
 }
 
 const generateKeyPairs = () => {

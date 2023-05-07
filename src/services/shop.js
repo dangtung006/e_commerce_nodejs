@@ -6,7 +6,8 @@ const KeyRepository = require("../repositories/key_token");
 const { createTokenPairs } = require("../helpers/auth");
 const { generateHashString } = require("../helpers/crypto");
 const {
-    BadRequestError
+    BadRequestError,
+    AuthFailureError
 } = require("../commons/response/error")
 
 const ShopRoles = {
@@ -22,28 +23,34 @@ class ShopServices {
         if (shop)
             throw new BadRequestError("Shop registed");
 
-        const hashPassword = await bcrypt.hash(password, 10);
-
         var newShop = await ShopRepository.create({
             name,
             email,
-            password: hashPassword,
+            password: await bcrypt.hash(password, 10),
             roles: [ShopRoles['shop']]
         });
 
-        const privateKey = generateHashString(64)
-        const publicKey = generateHashString(64)
+        const privateKey = generateHashString(64);
+        const publicKey = generateHashString(64);
 
-        await KeyRepository.create({
-            user: newShop._id,
-            publicKey,
-            privateKey
-        });
+        const tokens = createTokenPairs(
+            {
+                id: shop._id,
+                email: shop.email
+            },
+            publicKey, privateKey
+        );
 
-        const tokens = createTokenPairs({
-            id: shop._id,
-            email: shop.email
-        }, publicKey, privateKey);
+        await KeyRepository.updateOne(
+            { user: newShop._id },
+            {
+                user: newShop._id,
+                publicKey: privateKey,
+                privateKey: publicKey,
+                refreshToken: tokens.refreshToken
+            },
+            { upsert: true, new: true }
+        );
 
         return {
             shop: newShop,
@@ -58,7 +65,7 @@ class ShopServices {
 
         const match = bcrypt.compare(password, foundShop.password);
         if (!match)
-            throw new BadRequestError("Authen failed");
+            throw new AuthFailureError("Authen failed");
 
         const privateKey = generateHashString(64);
         const publicKey = generateHashString(64);
@@ -78,6 +85,10 @@ class ShopServices {
             shop: foundShop,
             tokens
         }
+    }
+
+    static async signOut({ }) {
+
     }
 
 

@@ -22,11 +22,15 @@ class BaseRepository {
     }
 
     getListByConditions(condition) {
-        return this._Entity.findOne(condition).skip().limit()
+        return this._Entity.findOne(condition).skip().limit();
     }
 
     create(opt) {
         return this._Entity.create(opt);
+    }
+
+    updateOne({ filter, data, opt }) {
+        return this._Entity.findOneAndUpdate(filter, data, opt);
     }
 
 }

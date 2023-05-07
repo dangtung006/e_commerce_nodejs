@@ -12,6 +12,11 @@ const REASON_STATUS_CODE = {
     'not_found': 'Not Found'
 }
 
+const {
+    StatusCodes,
+    ReasonPhrases
+} = require("../../commons/const/http/index");
+
 class BaseErrorResponse extends Error {
     constructor(message, status) {
         super(message);
@@ -49,10 +54,17 @@ class NotFoundError extends BaseErrorResponse {
     }
 }
 
+class AuthFailureError extends BaseErrorResponse {
+    constructor(message = ReasonPhrases.UNAUTHORIZED, status = StatusCodes.UNAUTHORIZED) {
+        super(message, status)
+    }
+}
+
 module.exports = {
     ConflictRequestErrorResponse,
     ForbidenRequestError,
     BadRequestError,
     InternalServerError,
-    NotFoundError
+    NotFoundError,
+    AuthFailureError
 }

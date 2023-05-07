@@ -6,7 +6,8 @@ const ShopSchema = new Schema({
     user: { type: Schema.Types.ObjectId, require: true, ref: "Shop" },
     publicKey: { type: String, trim: true, require: true },
     privateKey: { type: String, trim: true, require: true },
-    refreshToken: { type: Array, default: [] },
+    refreshToken: { type: String, required: true },
+    refreshTokenUsed: { type: Array, default: [] },
 }, {
     timestamps: true,
     collection: COLLECTION_NAME
