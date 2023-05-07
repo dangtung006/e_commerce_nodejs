@@ -19,6 +19,7 @@ class AuthRoutes extends BaseRoute {
         if (middlewares) {
             this.router.use(middlewares);
             this.router.post("/shop/signOut", wrapperAsync(ShopController.signOut));
+            this.router.post("/shop/refresh", wrapperAsync(ShopController.handleRefreshToken));
         }
     }
 }

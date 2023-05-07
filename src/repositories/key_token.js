@@ -16,6 +16,10 @@ class KeyRepository extends BaseRepository {
     removeById(id) {
         return this._Entity.remove(id);
     }
+
+    removeByUserId() {
+        return this._Entity.deleteOne({ user: Types.ObjectId(userId) }).lean();
+    }
 }
 
 module.exports = new KeyRepository()

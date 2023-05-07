@@ -1,17 +1,3 @@
-const STATUS_CODE = {
-    'forbidden': 403,
-    'conflict': 409,
-    'internal': 500,
-    'not_found': 404
-}
-
-const REASON_STATUS_CODE = {
-    'forbidden': "Bad Request",
-    'conflict': "Conflict",
-    'internal': 'Internal Server Error',
-    'not_found': 'Not Found'
-}
-
 const {
     StatusCodes,
     ReasonPhrases
@@ -25,25 +11,25 @@ class BaseErrorResponse extends Error {
 }
 
 class ConflictRequestErrorResponse extends BaseErrorResponse {
-    constructor(message = STATUS_CODE['conflict'], status = REASON_STATUS_CODE['conflict']) {
+    constructor(message = ReasonPhrases.CONFLICT, status = StatusCodes.CONFLICT) {
         super(message, status)
     }
 }
 
 class ForbidenRequestError extends BaseErrorResponse {
-    constructor(message = STATUS_CODE['forbidden'], status = REASON_STATUS_CODE['forbidden']) {
+    constructor(message = ReasonPhrases.FORBIDDEN, status = StatusCodes.FORBIDDEN) {
         super(message, status)
     }
 }
 
 class BadRequestError extends BaseErrorResponse {
-    constructor(message = STATUS_CODE['forbidden'], status = REASON_STATUS_CODE['forbidden']) {
+    constructor(message = ReasonPhrases.BAD_REQUEST, status = StatusCodes.BAD_REQUEST) {
         super(message, status)
     }
 }
 
 class InternalServerError extends BaseErrorResponse {
-    constructor(message = STATUS_CODE['internal'], status = REASON_STATUS_CODE['internal']) {
+    constructor(message = ReasonPhrases.INTERNAL_SERVER_ERROR, status = StatusCodes.INTERNAL_SERVER_ERROR) {
         super(message, status)
     }
 }

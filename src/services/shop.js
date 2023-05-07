@@ -7,7 +7,12 @@ const { generateHashString } = require("../helpers/crypto");
 const {
     BadRequestError,
     AuthFailureError
-} = require("../commons/response/error")
+} = require("../commons/response/error");
+
+const {
+    verifyToken,
+    createTokenPairs
+} = require("../helpers/auth")
 
 const ShopRoles = {
     'shop': "SHOP",
@@ -91,7 +96,38 @@ class ShopServices {
         return { delKey };
     }
 
+    static async handleRefreshToken({ refreshToken }) {
+        const foundToken = await KeyRepository.getOneByConditions({ refreshTokenUsed: refreshToken });
 
+        if (foundToken) {
+            const { userId, email } = await verifyToken(refreshToken, foundToken.privateKey);
+            await KeyRepository.removeByUserId(userId);
+        }
+
+        const holderToken = await KeyRepository.getOneByConditions({ refreshToken }).lean();
+        if (!holderToken)
+            throw new AuthFailureError("Invalid Token");
+
+        const { userId, email } = await verifyToken(refreshToken, holderToken.privateKey);
+        const foundShop = await ShopRepository.getOneByConditions({ email });
+        if (!foundShop)
+            throw new AuthFailureError("Shop not register");
+        const tokens = createTokenPairs({ userId, email }, holderToken.publicKey, holderToken.privateKey);
+
+        await holderToken.update({
+            $set: {
+                refreshToken: tokens.refreshToken
+            },
+            $addToSet: {
+                refreshTokenUsed: refreshToken
+            }
+        });
+
+        return {
+            shop: foundShop,
+            tokens: tokens
+        }
+    }
 }
 
 module.exports = ShopServices;

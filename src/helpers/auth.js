@@ -32,7 +32,7 @@ const createTokenPairs = (payload, publicKey, privateKey) => {
     return { accessToken, refreshToken };
 }
 
-const verifyToken = (accessToken, publicKey, cb) => {
+const verifyToken = (accessToken, publicKey, cb = null) => {
     return JWT.verify(accessToken, publicKey, cb);
 }
 
