@@ -1,6 +1,9 @@
 const express = require('express')
 const BaseRoute = require("./base");
-const ShopController = require("../../controllers/shop")
+const {
+    wrapperAsync
+} = require("../../middlewares/request")
+const ShopController = require("../../controllers/shop");
 
 class AuthRoutes extends BaseRoute {
     constructor(opt) {
@@ -10,15 +13,13 @@ class AuthRoutes extends BaseRoute {
             middlewares: opt && opt["middlewares"] ? opt["middlewares"] : null
         });
 
-        // this.router.use(function (req, res, next) {
-        //     if (1 == 0) {
-        //         return next();
-        //     } else {
-        //         return res.send("Fail to access")
-        //     }
-        // });
+        this.router.post("/shop/signUp", wrapperAsync(ShopController.signUp));
+        this.router.post("/shop/signIn", wrapperAsync(ShopController.signIn));
 
-        this.router.post("/shop/signUp", ShopController.signUp);
+        if (middlewares) {
+            this.router.use(middlewares);
+            this.router.post("/shop/signOut", wrapperAsync(ShopController.signOut));
+        }
     }
 }
 

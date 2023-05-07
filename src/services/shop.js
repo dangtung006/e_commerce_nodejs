@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 
 const ShopRepository = require("../repositories/shop");
 const KeyRepository = require("../repositories/key_token");
@@ -87,8 +86,9 @@ class ShopServices {
         }
     }
 
-    static async signOut({ }) {
-
+    static async signOut({ keyStore }) {
+        var delKey = await KeyRepository.removeById(keyStore._id);
+        return { delKey };
     }
 
 

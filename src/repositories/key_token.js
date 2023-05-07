@@ -12,6 +12,10 @@ class KeyRepository extends BaseRepository {
     getByUserId(userId) {
         return this._Entity.finOne({ user: Types.ObjectId(userId) }).lean();
     }
+
+    removeById(id) {
+        return this._Entity.remove(id);
+    }
 }
 
 module.exports = new KeyRepository()
