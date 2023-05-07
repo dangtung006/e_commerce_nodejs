@@ -5,7 +5,7 @@ const DOCUMENT_NAME = 'apikey';
 const ShopSchema = new Schema({
     key: { type: String, require: true, unique: true },
     status: { type: Boolean, default: true },
-    permission: { type: [String], require: true, enum: ["1111", "2222", "3333"] },
+    permission: { type: [String], require: true, enum: ["0000", "1111", "2222", "3333"] },
 }, {
     timestamps: true,
     collection: COLLECTION_NAME

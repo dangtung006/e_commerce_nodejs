@@ -12,13 +12,6 @@ const createTokenRSAPairs = (payload, publicKey, privateKey) => {
             expiresIn: "7 days"
         });
 
-        // JWT.verify(accessToken, publicKey, (err, decode) => {
-        //     if (err) {
-        //         console.log("err verify : ", err);
-        //     }
-        //     console.log("decode : ", decode);
-        // });
-
         return { accessToken, refreshToken };
 
     } catch (err) {
@@ -39,7 +32,12 @@ const createTokenPairs = (payload, publicKey, privateKey) => {
     return { accessToken, refreshToken };
 }
 
+const verifyToken = (accessToken, publicKey, cb) => {
+    return JWT.verify(accessToken, publicKey, cb);
+}
+
 module.exports = {
     createTokenRSAPairs,
-    createTokenPairs
+    createTokenPairs,
+    verifyToken
 };

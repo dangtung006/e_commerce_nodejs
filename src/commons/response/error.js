@@ -49,7 +49,7 @@ class InternalServerError extends BaseErrorResponse {
 }
 
 class NotFoundError extends BaseErrorResponse {
-    constructor(message = STATUS_CODE['not_found'], status = REASON_STATUS_CODE['not_found']) {
+    constructor(message = ReasonPhrases.NOT_FOUND, status = StatusCodes.NOT_FOUND) {
         super(message, status)
     }
 }
