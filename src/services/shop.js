@@ -14,7 +14,8 @@ const {
 
 const {
     BadRequestError,
-    AuthFailureError
+    AuthFailureError,
+    ForbidenRequestError
 } = require("../commons/response/error");
 
 const ShopRoles = {
@@ -42,8 +43,8 @@ class ShopServices {
 
         const tokens = createTokenPairs(
             {
-                id: shop._id,
-                email: shop.email
+                id: newShop._id,
+                email: newShop.email
             },
             publicKey, privateKey
         );
@@ -56,7 +57,7 @@ class ShopServices {
                 privateKey: publicKey,
                 refreshToken: tokens.refreshToken
             },
-            { upsert: true, new: true }
+            { new: true, upsert: true }
         );
 
         return {
@@ -66,7 +67,7 @@ class ShopServices {
     }
 
     static async signIn({ email, password, refreshToken = null }) {
-        const foundShop = ShopRepository.getOneByConditions({ email });
+        const foundShop = await ShopRepository.getOneByConditions({ email });
         if (!foundShop)
             throw new BadRequestError("Invalid Shop");
 
@@ -82,23 +83,22 @@ class ShopServices {
             email: foundShop.email
         }, publicKey, privateKey);
 
-        await KeyRepository.updateOne(
+        let key = await KeyRepository.updateOne(
             { user: foundShop._id },
             {
-                publicKey: privateKey,
-                privateKey: publicKey,
+                publicKey: publicKey,
+                privateKey: privateKey,
                 refreshToken: tokens.refreshToken
             },
             { upsert: true, new: true }
         );
-
         return {
             shop: foundShop,
             tokens
         }
     }
 
-    static async signOut({ keyStore }) {
+    static async signOut(keyStore) {
         var delKey = await KeyRepository.removeById(keyStore._id);
         return { delKey };
     }
@@ -107,11 +107,12 @@ class ShopServices {
         const foundToken = await KeyRepository.getOneByConditions({ refreshTokenUsed: refreshToken });
 
         if (foundToken) {
-            const { userId, email } = await verifyToken(refreshToken, foundToken.privateKey);
+            const { id: userId } = await verifyToken(refreshToken, foundToken.privateKey);
             await KeyRepository.removeByUserId(userId);
+            throw new ForbidenRequestError("Something went wrong, please relogin");
         }
 
-        const holderToken = await KeyRepository.getOneByConditions({ refreshToken }).lean();
+        const holderToken = await KeyRepository.getOneByConditions({ refreshToken });
         if (!holderToken)
             throw new AuthFailureError("Invalid Token");
 
@@ -121,7 +122,8 @@ class ShopServices {
             throw new AuthFailureError("Shop not register");
         const tokens = createTokenPairs({ userId, email }, holderToken.publicKey, holderToken.privateKey);
 
-        await holderToken.update({
+
+        await holderToken.updateOne({
             $set: {
                 refreshToken: tokens.refreshToken
             },

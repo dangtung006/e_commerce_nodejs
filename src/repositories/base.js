@@ -49,7 +49,7 @@ class BaseRepository {
         return this._Entity.create(opt);
     }
 
-    updateOne({ filter, data, opt }) {
+    updateOne(filter, data, opt) {
         return this._Entity.findOneAndUpdate(filter, data, opt);
     }
 

@@ -10,15 +10,15 @@ class KeyRepository extends BaseRepository {
     }
 
     getByUserId(userId) {
-        return this._Entity.finOne({ user: Types.ObjectId(userId) }).lean();
+        return this._Entity.findOne({ user: new Types.ObjectId(userId) }).lean();
     }
 
     removeById(id) {
-        return this._Entity.remove(id);
+        return this._Entity.findByIdAndRemove({ _id: id });
     }
 
-    removeByUserId() {
-        return this._Entity.deleteOne({ user: Types.ObjectId(userId) }).lean();
+    removeByUserId(userId) {
+        return this._Entity.deleteOne({ user: new Types.ObjectId(userId) }).lean();
     }
 }
 
