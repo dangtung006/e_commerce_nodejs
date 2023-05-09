@@ -9,14 +9,17 @@ class BaseRepository {
     defaultOpt = {
         offset: this.paging["offset"],
         limit: this.paging["limit"],
-        sort: this.sort
+        sort: this.sort,
+        isLean: false
     }
 
     constructor(opt) {
         this._Entity = opt && opt.entity ? opt.entity : null;
     }
 
-    getById(id) {
+    getById(id, opt = this.defaultOpt) {
+        const { isLean } = opt;
+        if (isLean) return this._Entity.findById(id).lean();
         return this._Entity.findById(id);
     }
 
@@ -33,7 +36,9 @@ class BaseRepository {
         return this._Entity.find().skip(offset).sort(sort).limit(limit);
     }
 
-    getOneByConditions(condition) {
+    getOneByConditions(condition, opt = this.defaultOpt) {
+        const { isLean } = opt;
+        if (isLean) return this._Entity.findOne(condition).lean()
         return this._Entity.findOne(condition)
     }
 

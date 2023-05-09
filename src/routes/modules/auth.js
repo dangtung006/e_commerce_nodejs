@@ -7,7 +7,6 @@ const ShopController = require("../../controllers/shop");
 
 class AuthRoutes extends BaseRoute {
     constructor({ middlewares }) {
-        console.log("middlewares : ", middlewares)
         super({
             router: express.Router(),
         });

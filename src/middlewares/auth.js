@@ -51,19 +51,16 @@ const permission = (permission) => {
 }
 
 const authentication = async (req, res, next) => {
-    console.log("aaaaaa")
     const userId = req.headers[Header.CLIENT_ID];
-    console.log("userId  : ", userId);
     if (!userId)
         throw new AuthFailureError("Invalid Request");
-    console.log("aadadadadada")
+
     const keyStore = await TokenKeyRepository.getByUserId(userId);
-    console.log("key public : ", keyStore.publicKey);
     if (!keyStore)
         throw new NotFoundError("Not Found Key stores");
 
     const accessToken = req.headers[Header.AUTHORIZATION];
-    console.log("accessToken : ", accessToken);
+
     if (!accessToken)
         throw new AuthFailureError("Invalid Token");
 

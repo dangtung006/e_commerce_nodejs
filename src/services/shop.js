@@ -2,7 +2,9 @@ const bcrypt = require("bcrypt");
 
 const ShopRepository = require("../repositories/shop");
 const KeyRepository = require("../repositories/key_token");
-
+const {
+    pickObjByKey
+} = require("../commons/handle_data/handle_object")
 const {
     generateHashString
 } = require("../helpers/crypto");
@@ -61,7 +63,7 @@ class ShopServices {
         );
 
         return {
-            shop: newShop,
+            shop: pickObjByKey(["_id", "name", "email"], newShop),
             tokens: tokens
         }
     }
@@ -93,7 +95,7 @@ class ShopServices {
             { upsert: true, new: true }
         );
         return {
-            shop: foundShop,
+            shop: pickObjByKey(["_id", "name", "email"], foundShop),
             tokens
         }
     }
@@ -133,7 +135,7 @@ class ShopServices {
         });
 
         return {
-            shop: foundShop,
+            shop: pickObjByKey(["_id", "name", "email"], foundShop),
             tokens: tokens
         }
     }
