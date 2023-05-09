@@ -1,10 +1,10 @@
 const express = require('express')
 const AuthRoutes = require("./modules/auth.js");
 const TestRoutes = require("./modules/test.js");
-const CartRoutes = require("./modules/test.js");
-const ProductRoutes = require("./modules/test.js");
-const OrderRoutes = require("./modules/test.js");
-const DiscountRoutes = require("./modules/test.js");
+const CartRoutes = require("./modules/cart.js");
+const ProductRoutes = require("./modules/product.js");
+const OrderRoutes = require("./modules/order.js");
+const DiscountRoutes = require("./modules/discount.js");
 
 const router = express.Router();
 const { apiKey, permission, authentication } = require("../middlewares/auth.js")
