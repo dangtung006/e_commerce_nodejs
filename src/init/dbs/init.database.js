@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const configs = require("../../configs/index");
 class MyDB {
 
     constructor() {
@@ -7,11 +7,15 @@ class MyDB {
     }
 
     async connect(type = "mongodb") {
+        const dbHost = configs["dev"]['db'].host;
+        const dbPort = configs["dev"]['db'].port;
+        const dbName = configs["dev"]['db'].name;
+
         try {
-            await mongoose.connect("mongodb://127.0.0.1:27017/myshop?retryWrites=true&w=majority", {
-                maxPoolSize: 50
-            });
-            console.log("connect success");
+            await mongoose.connect(
+                `mongodb://${dbHost}:${dbPort}/${dbName}?retryWrites=true&w=majority`,
+                { maxPoolSize: 50 }
+            );
         } catch (err) {
             console.log(err)
             console.log("connect err")
@@ -19,7 +23,6 @@ class MyDB {
     }
 
     static getInstance() {
-
         if (!MyDB.instance) {
             MyDB.instance = new MyDB();
         }

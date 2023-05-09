@@ -2,17 +2,20 @@ const bcrypt = require("bcrypt");
 
 const ShopRepository = require("../repositories/shop");
 const KeyRepository = require("../repositories/key_token");
-const { createTokenPairs } = require("../helpers/auth");
-const { generateHashString } = require("../helpers/crypto");
+
 const {
-    BadRequestError,
-    AuthFailureError
-} = require("../commons/response/error");
+    generateHashString
+} = require("../helpers/crypto");
 
 const {
     verifyToken,
     createTokenPairs
-} = require("../helpers/auth")
+} = require("../helpers/auth");
+
+const {
+    BadRequestError,
+    AuthFailureError
+} = require("../commons/response/error");
 
 const ShopRoles = {
     'shop': "SHOP",
@@ -79,11 +82,15 @@ class ShopServices {
             email: foundShop.email
         }, publicKey, privateKey);
 
-        await KeyRepository.create({
-            privateKey,
-            publicKey,
-            refreshToken: tokens.refreshToken
-        });
+        await KeyRepository.updateOne(
+            { user: foundShop._id },
+            {
+                publicKey: privateKey,
+                privateKey: publicKey,
+                refreshToken: tokens.refreshToken
+            },
+            { upsert: true, new: true }
+        );
 
         return {
             shop: foundShop,

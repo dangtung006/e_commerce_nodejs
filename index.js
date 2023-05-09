@@ -20,7 +20,7 @@ async function main() {
         })
 
     } catch (err) {
-        console.log("err", err)
+        console.error("err", err)
     }
 }
 
