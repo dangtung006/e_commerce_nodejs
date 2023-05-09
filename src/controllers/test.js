@@ -20,6 +20,9 @@ const _checkNumlessthen12Promise = (num) => {
     })
 }
 
+const _getPost = async (id) => {
+    return await (await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)).json();
+}
 
 const handleAsyncAwaitPromise = async (req, res) => {
     const num = req.query.num ? parseInt(req.query.num) : null;
@@ -112,10 +115,64 @@ const checkJobQueueTask = async (req, res) => {
     }
 }
 
+const checkAsyncForLoop = async (req, res) => {
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const posts = [];
+    for (let i = 0; i < arr.length; i++) {
+        const post = await _getPost(arr[i]);
+        posts.push(post);
+    }
+    console.log(posts)
+    return res.json({
+        posts: posts
+    })
+}
+
+const checkAsyncForOf = async (req, res) => {
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const posts = [];
+    for (item of arr) {
+        const post = await _getPost(item);
+        posts.push(post);
+    }
+    return res.json({
+        posts: posts
+    })
+}
+
+const checkAsyncForEach = async (req, res) => {
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const posts = [];
+
+    arr.forEach(async (item, idx) => {
+        const post = await _getPost(item);
+        console.log(idx, post)
+        posts.push(post);
+    });
+
+    return res.json({
+        posts: posts
+    })
+}
+
+const checkAsyncMap = async (req, res) => {
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const promises = arr.map(item => _getPost(item));
+    const posts = await Promise.all(promises).then(data => data).catch(err => null);
+    return res.json({
+        posts: posts
+    })
+}
+
 module.exports = {
     handleAsyncAwait,
     handleAsyncAwaitPromise,
     handleAsyncAwaitPromiseAll,
     checkCallStackTask,
-    checkJobQueueTask
+    checkJobQueueTask,
+
+    checkAsyncForLoop,
+    checkAsyncForEach,
+    checkAsyncMap,
+    checkAsyncForOf
 }

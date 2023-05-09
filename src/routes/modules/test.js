@@ -20,6 +20,12 @@ class AuthRoutes extends BaseRoute {
         this.router.get("/checkAsyncAwait", TestController.handleAsyncAwait);
         this.router.get("/checkJobQueue", TestController.checkJobQueueTask);
         this.router.get("/checkCallStackTask", TestController.checkCallStackTask);
+
+
+        this.router.get("/checkAsyncForLoop", TestController.checkAsyncForLoop);
+        this.router.get("/checkAsyncForOf", TestController.checkAsyncForOf);
+        this.router.get("/checkAsyncForEach", TestController.checkAsyncForEach);
+        this.router.get("/checkAsyncMap", TestController.checkAsyncMap);
     }
 }
 
