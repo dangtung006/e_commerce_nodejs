@@ -74,8 +74,48 @@ const handleAsyncAwait = async (req, res) => {
     }
 }
 
+const checkCallStackTask = async (req, res) => {
+    const num = req.query.num ? parseInt(req.query.num) : null;
+    if (!num) return res.send("Bad Request");
+    const fn1 = _ => console.log(1);
+    const fn2 = _ => console.log(2);
+    try {
+        fn1();
+        _checkNumlessthen10Promise(num).then(data => console.log(data)).catch(err => { console.log("err : ", err); return err; });
+        fn2();
+        return res.send({});
+        //log
+        // 11111111
+        // 222222
+        // GET / test / checkCallStackTask ? num = 1 200 13.771 ms - 2
+        // pass: 1 is < than 10
+    } catch (err) {
+        res.send({ err })
+        console.log("errcheckJobQueueTask : ", err);
+    }
+
+}
+
+const checkJobQueueTask = async (req, res) => {
+    const num = req.query.num ? parseInt(req.query.num) : null;
+    if (!num) return res.send("Bad Request");
+
+    try {
+        //respones in  13.683ms
+        _checkNumlessthen10Promise(num).then(data => console.log(data)).catch(err => { console.log("err : ", err); return err; });
+        _checkNumlessthen11Promise(num).then(data => console.log(data)).catch(err => { console.log("err : ", err); return err; });
+        _checkNumlessthen12Promise(num).then(data => console.log(data)).catch(err => { console.log("err : ", err); return err; });
+        return res.send({});
+    } catch (err) {
+        res.send({ err })
+        console.log("errcheckJobQueueTask : ", err);
+    }
+}
+
 module.exports = {
     handleAsyncAwait,
     handleAsyncAwaitPromise,
-    handleAsyncAwaitPromiseAll
+    handleAsyncAwaitPromiseAll,
+    checkCallStackTask,
+    checkJobQueueTask
 }
