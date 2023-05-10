@@ -42,5 +42,34 @@ class ProductServices {
             throw new InternalServerError("Update failed");
         return { result: result._id }
     }
+
+    static async unPublishProductByShop({ product_shop, product_id }) {
+        var foundProduct = await ProductRepository.getOneByConditions({ product_shop, _id: product_id });
+        if (!foundProduct)
+            throw new BadRequestError("Product not found");
+
+        foundProduct.isPublished = false;
+        foundProduct.isDraft = true;
+
+        const result = await foundProduct.save();
+        if (!result)
+            throw new InternalServerError("Update failed");
+        return { result: result._id }
+    }
+
+    static async handleSearchProduct({ keySearch }) {
+        const regexSearch = new RegExp(keySearch);
+        r = await ProductRepository._Entity.find(
+            {
+                isPublished: true,
+                $text: { $search: regexSearch }
+            },
+            { score: { $meta: 'textScore' } }
+        );
+        console.log(r);
+        return {
+            products: r
+        }
+    }
 }
 module.exports = ProductServices;

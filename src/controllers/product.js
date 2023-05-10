@@ -38,11 +38,27 @@ const publishProductByShop = async (req, res) => {
     }).send(res);
 }
 
+const unPublishProductByShop = async (req, res) => {
+    return new SuccessResponse({
+        message: "Success!",
+        metaData: await ProductServices.unPublishProductByShop(req.body)
+    }).send(res);
+}
+
+const getSearchProduct = async (req, res) => {
+    return new SuccessResponse({
+        message: "Success!",
+        metaData: await ProductServices.handleSearchProduct(req.params.keySearch)
+    }).send(res);
+}
+
 
 
 module.exports = {
     createProduct,
     getDraftShopProducts,
     getPublishedShopProducts,
-    publishProductByShop
+    publishProductByShop,
+    unPublishProductByShop,
+    getSearchProduct
 }

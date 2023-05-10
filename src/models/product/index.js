@@ -30,6 +30,7 @@ const ProductsSchema = new Schema(
         timestamps: true
     }
 )
+ProductsSchema.index({ product_name: "text", product_desc: "text" });
 //cannot use arrow fnc
 ProductsSchema.pre("save", async function (next) {
     this.product_slug = slugify(this.product_name, { lower: true })

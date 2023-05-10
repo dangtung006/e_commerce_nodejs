@@ -14,19 +14,26 @@ class AuthRoutes extends BaseRoute {
 
     initRoutes() {
         const shopProRoutes = this.initShopProductRoutes();
+        const publicProductRoutes = this.unPublishProductByShop();
+
         this.router.use("/shop", shopProRoutes);
+        this.router.use("/", publicProductRoutes);
     }
 
     initShopProductRoutes() {
         const shopProductRoutes = express.Router();
         shopProductRoutes.get("/draft/all/:shop", wrapperAsync(ProductController.getDraftShopProducts))
         shopProductRoutes.get("/published/all", wrapperAsync(ProductController.getPublishedShopProducts))
-        shopProductRoutes.post("/published/update", wrapperAsync(ProductController.publishProductByShop))
+        shopProductRoutes.post("/update/publish", wrapperAsync(ProductController.publishProductByShop))
+        shopProductRoutes.post("/update/unPublish", wrapperAsync(ProductController.unPublishProductByShop))
         shopProductRoutes.post("/create", wrapperAsync(ProductController.createProduct));
         return shopProductRoutes;
     }
 
-    initUserProductRoutes() { }
+    initPublicProductRoutes() {
+        const publicProductRoutes = express.Router();
+        publicProductRoutes.get("/search/:keySearch", wrapperAsync(ProductController.getSearchProduct))
+    }
 }
 
 module.exports = AuthRoutes
