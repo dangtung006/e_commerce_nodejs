@@ -2,9 +2,9 @@ const ClothesRepository = require("./clothes");
 const ElectronicsRepository = require("./clothes");
 
 class ProductFactory {
-    createProduct(productType, payload) {
-        if (productType == "clothe") return ClothesRepository(payload);
-        if (productType == "electronic") return ElectronicsRepository(payload);
+    static createProduct(productType, payload) {
+        if (productType == "clothe") return new ClothesRepository(payload).createProduct();
+        if (productType == "electronic") return new ElectronicsRepository(payload).createProduct();
     }
 };
 

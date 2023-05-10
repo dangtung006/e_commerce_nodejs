@@ -3,6 +3,7 @@ const BaseRoute = require("./base");
 const {
     wrapperAsync
 } = require("../../middlewares/request");
+const ProductService = require("../../services/product");
 
 class AuthRoutes extends BaseRoute {
     constructor({ }) {
@@ -13,7 +14,9 @@ class AuthRoutes extends BaseRoute {
 
     }
 
-    initRoutes() { }
+    initRoutes() {
+        this.post("/create", wrapperAsync(ProductService.createProduct))
+    }
 }
 
 module.exports = AuthRoutes
