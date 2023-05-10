@@ -11,7 +11,7 @@ class ElectronicsRepository extends BaeRepository {
             entity: ElectricsEntity
         });
 
-        this.ProductRepository = new ProductRepository(opt)
+        this.ProductRepository = ProductRepository
         this.product = opt;
     }
 

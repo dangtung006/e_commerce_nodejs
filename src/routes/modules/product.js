@@ -21,6 +21,7 @@ class AuthRoutes extends BaseRoute {
         const shopProductRoutes = express.Router();
         shopProductRoutes.get("/draft/all/:shop", wrapperAsync(ProductController.getDraftShopProducts))
         shopProductRoutes.get("/published/all", wrapperAsync(ProductController.getPublishedShopProducts))
+        shopProductRoutes.post("/published/update", wrapperAsync(ProductController.publishProductByShop))
         shopProductRoutes.post("/create", wrapperAsync(ProductController.createProduct));
         return shopProductRoutes;
     }

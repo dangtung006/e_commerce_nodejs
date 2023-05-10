@@ -37,6 +37,7 @@ class BaseRepository {
     }
 
     getOneByConditions(condition, opt = this.defaultOpt) {
+        console.log("opt : ", opt);
         const { isLean } = opt;
         if (isLean) return this._Entity.findOne(condition).lean()
         return this._Entity.findOne(condition)

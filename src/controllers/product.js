@@ -6,7 +6,6 @@ const {
 const ProductServices = require("../services/product");
 
 const createProduct = async (req, res) => {
-    console.log(req.body);
     return new CreatedResponse({
         message: "SignUp Success!",
         metaData: await ProductServices.createProduct(req.body.product_type, {
@@ -26,7 +25,16 @@ const getDraftShopProducts = async (req, res) => {
 const getPublishedShopProducts = async (req, res) => {
     return new SuccessResponse({
         message: "Success!",
-        metaData: await ProductServices.getPublishedShopProducts()
+        metaData: await ProductServices.getPublishedShopProducts(req.params.shop)
+    }).send(res);
+}
+
+const publishProductByShop = async (req, res) => {
+    console.log(req.body);
+
+    return new SuccessResponse({
+        message: "Success!",
+        metaData: await ProductServices.publishProductByShop(req.body)
     }).send(res);
 }
 
@@ -35,5 +43,6 @@ const getPublishedShopProducts = async (req, res) => {
 module.exports = {
     createProduct,
     getDraftShopProducts,
-    getPublishedShopProducts
+    getPublishedShopProducts,
+    publishProductByShop
 }

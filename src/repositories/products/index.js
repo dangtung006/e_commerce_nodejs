@@ -18,12 +18,10 @@ class ProductsRepository extends BaseRepository {
         return this.getListByConditions(query, { offset, limit });
     }
 
-    getPublishedListForShop(product_shop, offset, limit) {
+    getPublishedListForShopDefault(product_shop) {
         const query = { product_shop, isPublished: true };
-        return this.getListByConditions(query, { offset, limit });
+        return this.getListByConditions(query);
     }
-
-
 }
 
-module.exports = ProductsRepository
+module.exports = new ProductsRepository();
