@@ -5,28 +5,40 @@ const {
 } = require("../../middlewares/request")
 const TestController = require("../../controllers/test");
 
-class AuthRoutes extends BaseRoute {
+class TestRoutes extends BaseRoute {
     constructor({ }) {
         super({
             router: express.Router(),
         });
-        this.initRoutes();
-
+        this.initTestRoutes();
     }
 
-    initRoutes() {
-        this.router.get("/checkPromise", TestController.handleAsyncAwaitPromise);
-        this.router.get("/checkPromiseAll", TestController.handleAsyncAwaitPromiseAll);
-        this.router.get("/checkAsyncAwait", TestController.handleAsyncAwait);
-        this.router.get("/checkJobQueue", TestController.checkJobQueueTask);
-        this.router.get("/checkCallStackTask", TestController.checkCallStackTask);
+    initTestRoutes() {
+        const asyncTestRoutes = this.initAsyncTestRoutes();
+        const asyncLoopRoutes = this.initAsyncLoopRoutes();
 
+        this.router.use("/async", asyncTestRoutes)
+        this.router.use("/async_loop", asyncLoopRoutes);
+    }
 
-        this.router.get("/checkAsyncForLoop", TestController.checkAsyncForLoop);
-        this.router.get("/checkAsyncForOf", TestController.checkAsyncForOf);
-        this.router.get("/checkAsyncForEach", TestController.checkAsyncForEach);
-        this.router.get("/checkAsyncMap", TestController.checkAsyncMap);
+    initAsyncTestRoutes() {
+        const asyncTestRoutes = express().router();
+        asyncTestRoutes.get("/checkPromise", TestController.handleAsyncAwaitPromise);
+        asyncTestRoutes.get("/checkPromiseAll", TestController.handleAsyncAwaitPromiseAll);
+        asyncTestRoutes.get("/checkAsyncAwait", TestController.handleAsyncAwait);
+        asyncTestRoutes.get("/checkJobQueue", TestController.checkJobQueueTask);
+        asyncTestRoutes.get("/checkCallStackTask", TestController.checkCallStackTask);
+        return asyncTestRoutes;
+    }
+
+    initAsyncLoopRoutes() {
+        const asyncLoopRoutes = express().router();
+        asyncLoopRoutes.get("/checkAsyncForLoop", TestController.checkAsyncForLoop);
+        asyncLoopRoutes.get("/checkAsyncForOf", TestController.checkAsyncForOf);
+        asyncLoopRoutes.get("/checkAsyncForEach", TestController.checkAsyncForEach);
+        asyncLoopRoutes.get("/checkAsyncMap", TestController.checkAsyncMap);
+        return asyncLoopRoutes;
     }
 }
 
-module.exports = AuthRoutes
+module.exports = TestRoutes

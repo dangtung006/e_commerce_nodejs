@@ -10,6 +10,10 @@ const router = express.Router();
 const { apiKey, permission, authentication } = require("../middlewares/auth.js")
 const routeConfigs = [
     {
+        "routeName": "/test",
+        "router": new TestRoutes({}).router
+    },
+    {
         "routeName": "/auth",
         "router": new AuthRoutes({ middlewares: authentication }).router
     },
@@ -28,10 +32,6 @@ const routeConfigs = [
     {
         "routeName": "/order",
         "router": new OrderRoutes({ middlewares: authentication }).router
-    },
-    {
-        "routeName": "/test",
-        "router": new TestRoutes({}).router
     }
 ]
 
