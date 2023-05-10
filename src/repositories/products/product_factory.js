@@ -1,10 +1,11 @@
 const ClothesRepository = require("./clothes");
-const ElectronicsRepository = require("./clothes");
+const ElectronicsRepository = require("./electrics");
 
 class ProductFactory {
-    static createProduct(productType, payload) {
-        if (productType == "clothe") return new ClothesRepository(payload).createProduct();
-        if (productType == "electronic") return new ElectronicsRepository(payload).createProduct();
+
+    static async createProduct(productType, payload) {
+        if (productType == "Clothes") return new ClothesRepository(payload).createProduct()
+        if (productType == "Electronics") return new ElectronicsRepository(payload).createProduct();
     }
 };
 

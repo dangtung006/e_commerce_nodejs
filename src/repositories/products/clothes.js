@@ -16,13 +16,15 @@ class ClothesRepository extends BaeRepository {
     }
 
     async createProduct() {
-        const product = { ...this.product, product_attr };
-        const newClothe = await this._Entity.create(product_attr).then(data => data).catch(err => null);
-
-        if (!newClothe)
+        const { product_attr, product_shop } = this.product;
+        const newClothes = await this._Entity.create({ ...product_attr, product_shop }).then(data => data).catch(err => null);
+        if (!newClothes)
             throw new BadRequestError("Create Clothes Err");
 
-        const newProduct = await this.ProductRepository.create(product);
+        const newProduct = await this.ProductRepository.create({
+            _id: newClothes._id,
+            ...this.product
+        });
         if (!newProduct)
             throw BadRequestError("Create Product Err");
 

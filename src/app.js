@@ -11,10 +11,8 @@ const { errorHandler } = require("../src/middlewares/request")
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(compression());
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-app.use(express.urlencoded({
-    extended: true
-}))
 
 app.use(AppRoutes())
 app.use(errorHandler)

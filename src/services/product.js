@@ -14,11 +14,8 @@ const {
 
 
 class ProductServices {
-    static async createProduct(product_type, product) {
-        const product = await ProductFactoryRepository.createProduct(product_type, product);
-        if (!product)
-            throw new BadRequestError("errr")
-        return { product }
+    static async createProduct(product_type, data) {
+        return ProductFactoryRepository.createProduct(product_type, data);
     }
 }
 module.exports = ProductServices;

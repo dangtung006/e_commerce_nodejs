@@ -72,6 +72,7 @@ const authentication = async (req, res, next) => {
             throw new AuthFailureError("Invalid user");
 
         req.keyStore = keyStore;
+        req.user = decode;
         return next();
     });
 
