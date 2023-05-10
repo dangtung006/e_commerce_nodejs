@@ -22,7 +22,7 @@ class TestRoutes extends BaseRoute {
     }
 
     initAsyncTestRoutes() {
-        const asyncTestRoutes = express().router();
+        const asyncTestRoutes = express.Router();
         asyncTestRoutes.get("/checkPromise", TestController.handleAsyncAwaitPromise);
         asyncTestRoutes.get("/checkPromiseAll", TestController.handleAsyncAwaitPromiseAll);
         asyncTestRoutes.get("/checkAsyncAwait", TestController.handleAsyncAwait);
@@ -32,7 +32,7 @@ class TestRoutes extends BaseRoute {
     }
 
     initAsyncLoopRoutes() {
-        const asyncLoopRoutes = express().router();
+        const asyncLoopRoutes = express.Router();
         asyncLoopRoutes.get("/checkAsyncForLoop", TestController.checkAsyncForLoop);
         asyncLoopRoutes.get("/checkAsyncForOf", TestController.checkAsyncForOf);
         asyncLoopRoutes.get("/checkAsyncForEach", TestController.checkAsyncForEach);

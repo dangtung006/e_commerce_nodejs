@@ -20,6 +20,6 @@ class ProductFactoryRepository {
     }
 };
 
-ProductFactory.initProductRepositories("Clothes", ClothesRepository);
-ProductFactory.initProductRepositories("Electronics", ElectronicsRepository);
+ProductFactoryRepository.initProductRepositories("Clothes", ClothesRepository);
+ProductFactoryRepository.initProductRepositories("Electronics", ElectronicsRepository);
 module.exports = ProductFactoryRepository;

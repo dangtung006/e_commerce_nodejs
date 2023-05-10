@@ -30,7 +30,8 @@ const ProductsSchema = new Schema(
         timestamps: true
     }
 )
-ProductsSchema.prev("save", (next) => {
+
+ProductsSchema.pre("save", (next) => {
     this.product_slug = slugify(this.product_name, { lower: true })
     return next();
 })
