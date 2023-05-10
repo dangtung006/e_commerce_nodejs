@@ -9,7 +9,7 @@ class ProductsRepository extends BaseRepository {
     }
 
     getDraftListForShopDefault(product_shop) {
-        const query = { product_shop, isDraft: true };
+        const query = { product_shop };
         return this.getListByConditions(query);
     }
 

@@ -18,8 +18,8 @@ class ProductServices {
         return ProductFactoryRepository.createProduct(product_type, data);
     }
 
-    static async getDraftShopProducts() {
-        return ProductFactoryRepository.getAllDraftForShop();
+    static async getDraftShopProducts(shop) {
+        return ProductFactoryRepository.getAllDraftForShop(shop);
     }
 
 

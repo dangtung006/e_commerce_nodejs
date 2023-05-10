@@ -6,7 +6,7 @@ const DOCUMENT_NAME = 'product';
 const ProductsSchema = new Schema(
     {
         product_name: { type: String, require: true },
-        product_slug: { type: String, require: true },
+        product_slug: { type: String },
         product_thumb: { type: String, require: true },
         product_desc: { type: String, require: true },
         product_price: { type: Number, require: true },
@@ -30,8 +30,8 @@ const ProductsSchema = new Schema(
         timestamps: true
     }
 )
-
-ProductsSchema.pre("save", (next) => {
+//cannot use arrow fnc
+ProductsSchema.pre("save", async function (next) {
     this.product_slug = slugify(this.product_name, { lower: true })
     return next();
 })
