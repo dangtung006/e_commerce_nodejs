@@ -15,7 +15,24 @@ const createProduct = async (req, res) => {
     }).send(res);
 }
 
+const getDraftShopProducts = async (req, res) => {
+    return new SuccessResponse({
+        message: "Success!",
+        metaData: await ProductServices.getDraftShopProducts()
+    }).send(res);
+}
+
+const getPublishedShopProducts = async (req, res) => {
+    return new SuccessResponse({
+        message: "Success!",
+        metaData: await ProductServices.getPublishedShopProducts()
+    }).send(res);
+}
+
+
 
 module.exports = {
-    createProduct
+    createProduct,
+    getDraftShopProducts,
+    getPublishedShopProducts
 }

@@ -17,5 +17,14 @@ class ProductServices {
     static async createProduct(product_type, data) {
         return ProductFactoryRepository.createProduct(product_type, data);
     }
+
+    static async getDraftShopProducts() {
+        return ProductFactoryRepository.getAllDraftForShop();
+    }
+
+
+    static async getPublishedShopProducts() {
+        return ProductFactoryRepository.getPublishedShopProducts()
+    }
 }
 module.exports = ProductServices;

@@ -1,7 +1,8 @@
 const ClothesRepository = require("./clothes");
 const ElectronicsRepository = require("./electrics");
+const ProductsRepository = require("./index");
 
-class ProductFactory {
+class ProductFactoryRepository {
 
     static productRepositories = {}
     static initProductRepositories(types, classRef) {
@@ -10,8 +11,15 @@ class ProductFactory {
     static async createProduct(productType, payload) {
         return new this.productRepositories[productType](payload).createProduct()
     }
+
+    static async getAllDraftForShop() {
+        return new ProductsRepository().getDraftListForShopDefault();
+    }
+    static async getAllPublishedForShop() {
+        return new ProductsRepository().getPublishedListForShop();
+    }
 };
 
 ProductFactory.initProductRepositories("Clothes", ClothesRepository);
 ProductFactory.initProductRepositories("Electronics", ElectronicsRepository);
-module.exports = ProductFactory;
+module.exports = ProductFactoryRepository;
