@@ -4,19 +4,26 @@ const {
     wrapperAsync
 } = require("../../middlewares/request");
 const ProductController = require("../../controllers/product");
-
 class AuthRoutes extends BaseRoute {
     constructor({ }) {
         super({
             router: express.Router(),
         });
         this.initRoutes();
-
     }
 
     initRoutes() {
-        this.router.post("/create", wrapperAsync(ProductController.createProduct))
+        const shopProRoutes = this.initShopProductRoutes();
+        this.router.use("/shop", shopProRoutes);
     }
+
+    initShopProductRoutes() {
+        const shopProductRoutes = express.Router();
+        shopProductRoutes.post("/create", wrapperAsync(ProductController.createProduct));
+        return shopProductRoutes;
+    }
+
+    initUserProductRoutes() { }
 }
 
 module.exports = AuthRoutes
