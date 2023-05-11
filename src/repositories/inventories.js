@@ -7,6 +7,15 @@ class InventoriesRepository extends BaseRepository {
             entity: InventoryEntity
         })
     }
+
+    createInventories({ productId, shopId, stock, location = "unknow" }) {
+        return this.create({
+            invent_productId: productId,
+            invent_shopId: shopId,
+            invent_stock: stock,
+            invent_location: location
+        })
+    }
 }
 
 module.exports = new InventoriesRepository()

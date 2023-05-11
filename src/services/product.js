@@ -1,5 +1,6 @@
 const ProductFactoryRepository = require("../repositories/products/product_factory");
 const ProductRepository = require("../repositories/products/index");
+const InventoriesRepository = require("../repositories/inventories");
 
 const {
     pickObjByKey
@@ -8,14 +9,23 @@ const {
 
 const {
     BadRequestError,
-    InternalServerError
+    InternalServerError,
 } = require("../commons/response/error");
 
 
 
 class ProductServices {
     static async createProduct(product_type, data) {
-        return ProductFactoryRepository.createProduct(product_type, data);
+        const newProduct = await ProductFactoryRepository.createProduct(product_type, data);
+        if (!newProduct) throw new InternalServerError("Failed To Create Product");
+
+        await InventoriesRepository.createInventories({
+            productId: newProduct._id,
+            shopId: newProduct.product_shop,
+            stock: newProduct.product_quantity
+        })
+
+        return newProduct;
     }
 
     static async updateProduct(product_id, update) {
