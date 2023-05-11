@@ -7,6 +7,7 @@ const {
 
 
 const {
+    NotFoundError,
     BadRequestError
 } = require("../commons/response/error");
 
@@ -86,6 +87,37 @@ class DiscountServices {
             discount_shopId: shop_id,
             discount_isActive: true
         }, { page, limit });
+    }
+
+    static async calculateDiscountAmount({ code_id, shop_id, products }) {
+
+    }
+
+    static async cancelDiscountCodeByUser({ shop_id, code_id, user_id }) {
+        const foundDiscount = await DiscountRepository.getOneByConditions({
+            discount_shopId: shop_id,
+            code_id: code_id
+        });
+
+        if (!foundDiscount) throw new NotFoundError("Discount doesn't exists");
+
+        return DiscountRepository.updateOneByCondition(
+            { _id: foundDiscount._id },
+            {
+                $pull: { discount_user_used: user_id },
+                $inc: {
+                    discount_max_uses: 1,
+                    discount_used_count: -1
+                }
+            }
+        )
+    }
+
+    static async deleteDiscountCode({ shop_id, code_id }) {
+        return DiscountRepository.deleteOneByCondition({
+            discount_shopId: shop_id,
+            discount_code: code_id
+        })
     }
 }
 
