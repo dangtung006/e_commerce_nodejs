@@ -52,6 +52,13 @@ const getSearchProduct = async (req, res) => {
     }).send(res);
 }
 
+const getProductList = async (req, res) => {
+    return new SuccessResponse({
+        message: "Success!",
+        metaData: await ProductServices.getProductList(req.query)
+    }).send(res);
+}
+
 
 
 module.exports = {
@@ -60,5 +67,6 @@ module.exports = {
     getPublishedShopProducts,
     publishProductByShop,
     unPublishProductByShop,
-    getSearchProduct
+    getSearchProduct,
+    getProductList
 }

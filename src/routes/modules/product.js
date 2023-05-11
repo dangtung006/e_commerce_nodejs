@@ -32,7 +32,8 @@ class AuthRoutes extends BaseRoute {
 
     initPublicProductRoutes() {
         const publicProductRoutes = express.Router();
-        publicProductRoutes.get("/search/:keySearch", wrapperAsync(ProductController.getSearchProduct))
+        publicProductRoutes.get("/search/:keySearch", wrapperAsync(ProductController.getSearchProduct));
+        publicProductRoutes.get("/all", wrapperAsync(ProductController.getProductList));
     }
 }
 

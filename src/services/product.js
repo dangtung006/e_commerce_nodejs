@@ -71,5 +71,12 @@ class ProductServices {
             products: r
         }
     }
+
+    static async getProductList({ offset, limit, sort }) {
+        const skip = (offset - 1) * limit;
+        const sortBy = sort === "ctime" ? { _id: -1 } : { _id: 1 };
+        result = await ProductRepository._Entity.find({ isPublished: true }).skip(skip).limit(limit).sort(sortBy).lean();
+        return { product: r }
+    }
 }
 module.exports = ProductServices;
