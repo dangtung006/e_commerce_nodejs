@@ -18,6 +18,11 @@ class ProductServices {
         return ProductFactoryRepository.createProduct(product_type, data);
     }
 
+    static async updateProduct(product_id, update) {
+        const { product_type } = update;
+        return ProductFactoryRepository.updateProduct(product_id, product_type, update);
+    }
+
     static async getDraftShopProducts(shop) {
         return ProductRepository.getDraftListForShopDefault(shop);
     }

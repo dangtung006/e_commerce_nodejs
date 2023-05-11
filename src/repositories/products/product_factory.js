@@ -14,13 +14,9 @@ class ProductFactoryRepository {
         return new this.productRepositories[productType](payload).createProduct()
     }
 
-    // static async getAllDraftForShop(shop) {
-    //     return ProductsRepository().getDraftListForShopDefault(shop);
-    // }
+    static async updateProduct(product_id, productType, payload) {
 
-    // static async getAllPublishedForShop(shop) {
-    //     return ProductsRepository().getDraftListForShopDefault(shop);
-    // }
+    }
 };
 
 ProductFactoryRepository.initProductRepositories("Clothes", ClothesRepository);

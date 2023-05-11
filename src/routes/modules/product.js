@@ -27,6 +27,7 @@ class AuthRoutes extends BaseRoute {
         shopProductRoutes.post("/update/publish", wrapperAsync(ProductController.publishProductByShop))
         shopProductRoutes.post("/update/unPublish", wrapperAsync(ProductController.unPublishProductByShop))
         shopProductRoutes.post("/create", wrapperAsync(ProductController.createProduct));
+        shopProductRoutes.patch("/update/:product_id", wrapperAsync(ProductController.updateProduct));
         return shopProductRoutes;
     }
 

@@ -15,6 +15,13 @@ const createProduct = async (req, res) => {
     }).send(res);
 }
 
+const updateProduct = async (req, res) => {
+    return new SuccessResponse({
+        message: "Success!",
+        metaData: await ProductServices.updateProduct(req.params.shop, red.body)
+    }).send(res);
+}
+
 const getDraftShopProducts = async (req, res) => {
     return new SuccessResponse({
         message: "Success!",
@@ -70,6 +77,7 @@ const getProductDetail = async (req, res) => {
 
 module.exports = {
     createProduct,
+    updateProduct,
     getDraftShopProducts,
     getPublishedShopProducts,
     publishProductByShop,
