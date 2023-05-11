@@ -55,10 +55,7 @@ class DiscountServices {
     }
     static async updateDiscount() { }
 
-    static async getAllProductsByDiscountCodeShop(
-        { discount_code, discount_shopId },
-        { page, limit }
-    ) {
+    static async getAllProductsByDiscountCodeShop({ discount_code, discount_shopId, page, limit }) {
         const foundDiscount = await DiscountRepository.getOneByConditions({
             discount_code,
             discount_shopId
@@ -81,6 +78,13 @@ class DiscountServices {
         return ProductsRepository.getListByConditions({
             _id: { $in: discount_products_applied },
             isPublished: true
+        }, { page, limit });
+    }
+
+    static async getAllDiscountCodeByShop({ shop_id, page, limit }) {
+        return DiscountRepository.getListByConditions({
+            discount_shopId: shop_id,
+            discount_isActive: true
         }, { page, limit });
     }
 }
