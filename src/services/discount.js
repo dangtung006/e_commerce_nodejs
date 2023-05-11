@@ -1,4 +1,5 @@
 const DiscountRepository = require("../repositories/discount");
+const ProductsRepository = require("../repositories/products/index");
 
 const {
     pickObjByKey
@@ -52,8 +53,35 @@ class DiscountServices {
         return newDiscount;
 
     }
-    static async updateDiscount() {
+    static async updateDiscount() { }
 
+    static async getAllProductsByDiscountCodeShop(
+        { discount_code, discount_shopId },
+        { page, limit }
+    ) {
+        const foundDiscount = await DiscountRepository.getOneByConditions({
+            discount_code,
+            discount_shopId
+        });
+
+        if (!foundDiscount || !foundDiscount.discount_isActive)
+            throw new BadRequestError("Discount not exist");
+
+        const { discount_products_type, discount_products_applied } = foundDiscount;
+
+        if (discount_products_type === "All")
+            return ProductsRepository.getListByConditions(
+                {
+                    product_shop: discount_shopId,
+                    isPublished: true
+                },
+                { page, limit }
+            )
+
+        return ProductsRepository.getListByConditions({
+            _id: { $in: discount_products_applied },
+            isPublished: true
+        }, { page, limit });
     }
 }
 

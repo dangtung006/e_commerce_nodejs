@@ -29,23 +29,22 @@ class BaseRepository {
     }
 
     getList(opt = this.defaultOpt) {
-        var offset = opt && opt.offset ? opt.offset : this.paging['offset'];
         var limit = opt && opt.limit ? opt.limit : this.paging['limit'];
+        var offset = opt && opt.page ? (opt.page - 1) * limit : this.paging['offset'];
         var sort = opt && opt.sort ? opt.sort : this.sort;
 
         return this._Entity.find().skip(offset).sort(sort).limit(limit);
     }
 
     getOneByConditions(condition, opt = this.defaultOpt) {
-        console.log("opt : ", opt);
         const { isLean } = opt;
         if (isLean) return this._Entity.findOne(condition).lean()
         return this._Entity.findOne(condition)
     }
 
     getListByConditions(condition, opt = this.defaultOpt) {
-        var offset = opt && opt.offset ? opt.offset : this.paging['offset'];
         var limit = opt && opt.limit ? opt.limit : this.paging['limit'];
+        var offset = opt && opt.page ? (opt.page - 1) * limit : this.paging['offset'];
         var sort = opt && opt.sort ? opt.sort : this.sort;
 
         return this._Entity.find(condition).skip(offset).limit(limit).sort(sort);
