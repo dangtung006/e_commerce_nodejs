@@ -89,8 +89,54 @@ class DiscountServices {
         }, { page, limit });
     }
 
-    static async calculateDiscountAmount({ code_id, shop_id, products }) {
+    static async calculateDiscountAmount({ code_id, shop_id, userId, products }) {
 
+        const foundDiscount = await DiscountRepository.getOneByConditions({
+            discount_shopId: shop_id,
+            code_id: code_id
+        });
+
+        if (!foundDiscount) throw new NotFoundError("Discount doesn't exists");
+
+        const {
+            discount_is_active,
+            discount_max_uses,
+            discount_min_order_value,
+            discount_max_per_user,
+            discount_user_used,
+            discount_start_date,
+            discount_end_date,
+            discount_type,
+            discount_value
+
+        } = foundDiscount;
+
+        if (!discount_is_active) throw new BadRequestError("Discount has expried");//discount_is_active === false
+        if (!discount_max_uses) throw new BadRequestError("Discounts are out"); // discount_max_uses === 0
+        if (!DiscountRepository.isExpiredDate(discount_start_date, discount_end_date)) throw new BadRequestError("Discount has expried");
+
+        var totalOrder
+        if (discount_min_order_value > 0) {
+            totalOrder = products.reduce((val, product) => val + product.price * product.quantity, 0);
+            if (totalOrder < discount_min_order_value)
+                throw new BadRequestError(`discount require min value is ${discount_min_order_value}`)
+        }
+
+        if (!DiscountRepository.isValidTimeToUseDiscount(discount_max_per_user, discount_user_used, userId))
+            throw new BadRequestError(
+                `discount require max time value is ${discount_max_per_user}`
+            );
+
+        const amountDiscount
+            = discount_type === "fixed_amount"
+                ? discount_value
+                : totalOrder * (discount_value / 100);
+
+        return {
+            totalOrder,
+            amountDiscount,
+            discountOrder: totalOrder - amountDiscount
+        }
     }
 
     static async cancelDiscountCodeByUser({ shop_id, code_id, user_id }) {

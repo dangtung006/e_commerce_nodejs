@@ -17,6 +17,10 @@ class DiscountRepository extends BaseRepository {
         const isValid = (new Date(start_date) >= new Date(end_date));
         return isValid;
     }
+
+    isValidTimeToUseDiscount(discount_max_per_user, discount_user_used, userId) {
+        return true;
+    }
 }
 
 module.exports = new DiscountRepository()
