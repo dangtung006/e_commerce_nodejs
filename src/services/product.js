@@ -8,8 +8,6 @@ const {
 
 const {
     BadRequestError,
-    AuthFailureError,
-    ForbidenRequestError,
     InternalServerError
 } = require("../commons/response/error");
 
@@ -75,8 +73,13 @@ class ProductServices {
     static async getProductList({ offset, limit, sort }) {
         const skip = (offset - 1) * limit;
         const sortBy = sort === "ctime" ? { _id: -1 } : { _id: 1 };
-        result = await ProductRepository._Entity.find({ isPublished: true }).skip(skip).limit(limit).sort(sortBy).lean();
-        return { product: r }
+        const result = await ProductRepository._Entity.find({ isPublished: true }).skip(skip).limit(limit).sort(sortBy).lean();
+        return { products: result }
+    }
+
+    static async getProductDetail({ product_id }) {
+        const result = await ProductRepository.getById({ _id: product_id });
+        return { product: result }
     }
 }
 module.exports = ProductServices;

@@ -45,6 +45,8 @@ const unPublishProductByShop = async (req, res) => {
     }).send(res);
 }
 
+
+//Public accesss
 const getSearchProduct = async (req, res) => {
     return new SuccessResponse({
         message: "Success!",
@@ -59,7 +61,12 @@ const getProductList = async (req, res) => {
     }).send(res);
 }
 
-
+const getProductDetail = async (req, res) => {
+    return new SuccessResponse({
+        message: "Success!",
+        metaData: await ProductServices.getProductDetail(req.params)
+    }).send(res);
+}
 
 module.exports = {
     createProduct,
@@ -68,5 +75,6 @@ module.exports = {
     publishProductByShop,
     unPublishProductByShop,
     getSearchProduct,
-    getProductList
+    getProductList,
+    getProductDetail
 }
