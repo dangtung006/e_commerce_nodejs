@@ -55,7 +55,7 @@ class BaseRepository {
     }
 
     updateOne(filter, data, opt) {
-        return this._Entity.findOneAndUpdate(filter, data, opt);
+        return this._Entity.updateOne(filter, data, opt);
     }
 
     updateOneByCondition(filter, update, opt) {

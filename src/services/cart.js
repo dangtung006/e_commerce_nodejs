@@ -23,6 +23,21 @@ class CartService {
 
         return CartRepository.updateCartProductQuantiy({ userId, product })
     }
+
+    static async addToCartV2({ userId, productId }) {
+
+    }
+
+    static deleteUserCart({ userId, productId }) {
+        return CartRepository.updateOne(
+            { cart_userId: userId, cart_state: "active" },
+            { $pull: { cart_products: productId } }
+        );
+    }
+
+    static getListUserCart({ userId }) {
+        return CartRepository.getOneByConditions({ cart_userId: userId });
+    }
 }
 
 module.exports = CartService;
