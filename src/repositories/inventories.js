@@ -16,6 +16,22 @@ class InventoriesRepository extends BaseRepository {
             invent_location: location
         })
     }
+
+    updateInventories({ productId, quantity, cartId }) {
+        return this.updateOne(
+            {
+                invent_productId: productId,
+                invent_stock: { $gte: quantity }
+            },
+            {
+                $inc: { invent_stock: -quantity },
+                $push: {
+                    invent_reservation: { quantity, cartId, createdOn: new Date() }
+                }
+            },
+            { upsert: true, new: true }
+        )
+    }
 }
 
 module.exports = new InventoriesRepository()
