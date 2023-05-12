@@ -5,6 +5,7 @@ const CartRoutes = require("./modules/cart.js");
 const ProductRoutes = require("./modules/product.js");
 const OrderRoutes = require("./modules/order.js");
 const DiscountRoutes = require("./modules/discount.js");
+const InventoriesRoutes = require("./modules/inventories.js");
 
 const router = express.Router();
 const { apiKey, permission, authentication } = require("../middlewares/auth.js")
@@ -28,6 +29,10 @@ const routeConfigs = [
     {
         "routeName": "/cart",
         "router": new CartRoutes({ middlewares: authentication }).router
+    },
+    {
+        "routeName": "/inventories",
+        "router": new InventoriesRoutes({ middlewares: authentication }).router
     },
     {
         "routeName": "/order",
